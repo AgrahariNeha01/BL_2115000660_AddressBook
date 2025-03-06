@@ -14,39 +14,21 @@ public class AddressBookController {
 
     private final AddressBookService service;
 
+    // ✅ Service Inject Ho Chuka Hai (Constructor Injection)
     public AddressBookController(AddressBookService service) {
         this.service = service;
     }
 
     @PostMapping
     public ResponseEntity<String> add(@RequestBody AddressBookDTO dto) {
-        service.add(dto);
+        service.add(dto);  // ✅ Service Ka Use
         return ResponseEntity.ok("Added Successfully!");
     }
 
     @GetMapping
     public ResponseEntity<List<AddressBookModel>> getAll() {
-        return ResponseEntity.ok(service.getAll());
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<AddressBookModel> getById(@PathVariable int id) {
-        return service.getById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
-    }
-
-    @PutMapping("/{id}")
-    public ResponseEntity<String> update(@PathVariable int id, @RequestBody AddressBookDTO dto) {
-        return service.update(id, dto) ?
-                ResponseEntity.ok("Updated Successfully!") :
-                ResponseEntity.notFound().build();
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<String> delete(@PathVariable int id) {
-        return service.delete(id) ?
-                ResponseEntity.ok("Deleted Successfully!") :
-                ResponseEntity.notFound().build();
+        return ResponseEntity.ok(service.getAll());  // ✅ Service Se Data Fetch
     }
 }
+
+

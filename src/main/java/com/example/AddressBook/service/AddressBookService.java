@@ -18,10 +18,7 @@ public class AddressBookService {
     }
 
     public void add(AddressBookDTO dto) {
-        AddressBookModel model = new AddressBookModel();
-        model.setName(dto.getName());
-        model.setPhone(dto.getPhone());
-        model.setEmail(dto.getEmail());
+        AddressBookModel model = new AddressBookModel(0, dto.getName(), dto.getPhone(), dto.getEmail());
         repo.save(model);
     }
 
@@ -34,12 +31,8 @@ public class AddressBookService {
     }
 
     public boolean update(int id, AddressBookDTO dto) {
-        Optional<AddressBookModel> optional = repo.findById(id);
-        if (optional.isPresent()) {
-            AddressBookModel model = optional.get();
-            model.setName(dto.getName());
-            model.setPhone(dto.getPhone());
-            model.setEmail(dto.getEmail());
+        if (repo.existsById(id)) {
+            AddressBookModel model = new AddressBookModel(id, dto.getName(), dto.getPhone(), dto.getEmail());
             repo.save(model);
             return true;
         }
