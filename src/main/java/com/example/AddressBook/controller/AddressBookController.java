@@ -3,6 +3,7 @@ package com.example.AddressBook.controller;
 import com.example.AddressBook.dto.AddressBookDTO;
 import com.example.AddressBook.model.AddressBookModel;
 import com.example.AddressBook.service.AddressBookService;
+import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,9 +21,9 @@ public class AddressBookController {
         this.service = service;
     }
 
-    // ✅ Address Book Entry Add Karega (POST)
+    // ✅ Address Book Entry Add Karega (POST) - Validation ke saath
     @PostMapping("/add")
-    public ResponseEntity<String> addEntry(@RequestBody AddressBookDTO dto) {
+    public ResponseEntity<String> addEntry(@Valid @RequestBody AddressBookDTO dto) {
         log.info("Adding contact: {}", dto);
         service.add(dto);
         return ResponseEntity.ok("Contact added successfully!");
