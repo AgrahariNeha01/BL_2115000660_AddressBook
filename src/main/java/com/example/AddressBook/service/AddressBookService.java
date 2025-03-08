@@ -3,6 +3,7 @@ package com.example.AddressBook.service;
 import com.example.AddressBook.dto.AddressBookDTO;
 import com.example.AddressBook.model.AddressBookModel;
 import com.example.AddressBook.repository.AddressBookRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import jakarta.annotation.PostConstruct;
 
@@ -10,6 +11,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+
+@Slf4j
 @Service
 public class AddressBookService {
 
@@ -62,5 +65,16 @@ public class AddressBookService {
             return true;
         }
         return false;
+    }
+    public void addEntry(String name, String phone) {
+        log.info("Adding contact: {} - {}", name, phone);
+        AddressBookModel contact = new AddressBookModel(0, name, phone, ""); // Email empty rakh diya
+        repo.save(contact);
+    }
+
+
+    public void deleteEntry(String name) {
+        log.warn("Deleting contact: {}", name);
+        repo.deleteByName(name);
     }
 }
