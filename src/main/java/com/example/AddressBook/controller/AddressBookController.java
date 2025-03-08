@@ -1,6 +1,7 @@
 package com.example.AddressBook.controller;
 
 import com.example.AddressBook.dto.AddressBookDTO;
+import com.example.AddressBook.exception.AddressBookException;
 import com.example.AddressBook.model.AddressBookModel;
 import com.example.AddressBook.service.AddressBookService;
 import jakarta.validation.Valid;
@@ -36,11 +37,15 @@ public class AddressBookController {
         return ResponseEntity.ok(service.getAll());
     }
 
-    // ✅ Contact Delete Karega (DELETE)
+    // ✅ Contact Delete Karega (DELETE) - Name se
     @DeleteMapping("/delete")
     public ResponseEntity<String> deleteEntry(@RequestParam String name) {
         log.warn("Deleting contact: {}", name);
-        service.deleteEntry(name);
-        return ResponseEntity.ok("Contact deleted successfully!");
+        try {
+            service.deleteEntry(name);
+            return ResponseEntity.ok("Contact deleted successfully!");
+        } catch (AddressBookException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 }

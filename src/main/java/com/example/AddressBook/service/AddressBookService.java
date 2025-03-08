@@ -1,6 +1,7 @@
 package com.example.AddressBook.service;
 
 import com.example.AddressBook.dto.AddressBookDTO;
+import com.example.AddressBook.exception.AddressBookException;
 import com.example.AddressBook.model.AddressBookModel;
 import com.example.AddressBook.repository.AddressBookRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -10,7 +11,6 @@ import jakarta.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
 
 @Slf4j
 @Service
@@ -72,9 +72,12 @@ public class AddressBookService {
         repo.save(contact);
     }
 
-
     public void deleteEntry(String name) {
         log.warn("Deleting contact: {}", name);
-        repo.deleteByName(name);
+        if (repo.existsByName(name)) {
+            repo.deleteByName(name);
+        } else {
+            throw new AddressBookException("Contact not found with name: " + name);
+        }
     }
 }

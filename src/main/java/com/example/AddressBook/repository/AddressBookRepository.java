@@ -7,4 +7,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface AddressBookRepository extends JpaRepository<AddressBookModel, Integer> {
     void deleteByName(String name);
+
+    boolean existsByName(String name);
 }
