@@ -35,6 +35,19 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>org.springdoc</groupId>
+			<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+			<version>2.1.0</version>
+		</dependency>
+
+
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt</artifactId>
+			<version>0.12.6</version>
+		</dependency>
+
 
 		<!-- H2 Database (Ya MySQL/PostgreSQL ke liye change kar sakti ho) -->
 		<dependency>
@@ -84,6 +97,8 @@
 		</dependency>
 
 
+
+
 		<dependency>
 			<groupId>com.mysql</groupId>
 			<artifactId>mysql-connector-j</artifactId>
@@ -124,5 +139,6 @@
 			</plugin>
 		</plugins>
 	</build>
+
 
 </project>

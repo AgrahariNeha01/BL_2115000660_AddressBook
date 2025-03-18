@@ -26,7 +26,7 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginDTO dto) {
         try {
-            return ResponseEntity.ok(service.login(dto));  // Ye JWT token return karega
+            return ResponseEntity.ok(service.login(dto));  // ✅ This will return the JWT Token
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Login failed: " + e.getMessage());
         }
