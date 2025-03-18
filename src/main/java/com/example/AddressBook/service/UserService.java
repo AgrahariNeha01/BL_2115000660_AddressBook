@@ -34,6 +34,6 @@ public class UserService {
         if (userOpt.isPresent() && passwordEncoder.matches(dto.getPassword(), userOpt.get().getPassword())) {
             return jwtUtil.generateToken(dto.getEmail()); // ✅ Fixed
         }
-        return "Invalid email or password!";
+        return "Invalid email or password!" ;
     }
 }

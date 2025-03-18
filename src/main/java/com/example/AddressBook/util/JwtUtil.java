@@ -5,14 +5,17 @@ import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.stereotype.Component;
 
+
 import javax.crypto.SecretKey;
 import java.util.Date;
 import java.util.function.Function;
+import java.util.Base64;
 
 @Component
 public class JwtUtil {
-    private static final String SECRET_KEY = "your-32-character-secret-key-your-32!"; // 32+ char key required
-
+    private static final String SECRET_KEY = Base64.getEncoder().encodeToString(
+            "this-is-a-secure-32-byte-secret-key!".getBytes()
+    );
     public String generateToken(String email) {
         return Jwts.builder()
                 .subject(email)
