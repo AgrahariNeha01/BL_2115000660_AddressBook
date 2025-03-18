@@ -8,17 +8,19 @@ import com.example.AddressBook.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
 import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class UserService {
+public class UserService implements IUserService {
 
     private final UserRepository repo;
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
     private final EmailService emailService;
 
+    @Override
     public String register(UserDTO dto) {
         if (repo.findByEmail(dto.getEmail()).isPresent()) {
             return "Email already registered!";
@@ -29,6 +31,7 @@ public class UserService {
         return "User registered successfully!";
     }
 
+    @Override
     public String login(LoginDTO dto) {
         Optional<UserModel> userOpt = repo.findByEmail(dto.getEmail());
         if (userOpt.isPresent() && passwordEncoder.matches(dto.getPassword(), userOpt.get().getPassword())) {
@@ -38,6 +41,7 @@ public class UserService {
         return "Invalid email or password!";
     }
 
+    @Override
     public String forgotPassword(String email, String newPassword) {
         Optional<UserModel> userOpt = repo.findByEmail(email);
         if (userOpt.isEmpty()) {
@@ -52,6 +56,7 @@ public class UserService {
         return "Password has been changed successfully!";
     }
 
+    @Override
     public String resetPassword(String email, String currentPassword, String newPassword) {
         Optional<UserModel> userOpt = repo.findByEmail(email);
         if (userOpt.isEmpty()) {
@@ -68,7 +73,7 @@ public class UserService {
         return "Password reset successfully!";
     }
 
-    // ✅ Ye method add kiya hai (fix for AuthController)
+    @Override
     public void sendLoginNotification(String email) {
         emailService.sendSimpleEmail(email, "Login Alert", "You have logged in successfully.");
     }

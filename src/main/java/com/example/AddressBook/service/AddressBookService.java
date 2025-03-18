@@ -14,35 +14,38 @@ import java.util.Optional;
 
 @Slf4j
 @Service
-public class AddressBookService {
+public class AddressBookService implements IAddressBookService {
 
     private final AddressBookRepository repo;
-    private final List<AddressBookModel> memList = new ArrayList<>(); // ? In-memory List
+    private final List<AddressBookModel> memList = new ArrayList<>();
 
     public AddressBookService(AddressBookRepository repo) {
         this.repo = repo;
     }
 
-    // ? Jab program start ho, tab DB se saara data list me load ho
     @PostConstruct
     public void init() {
         memList.addAll(repo.findAll());
     }
 
+    @Override
     public void add(AddressBookDTO dto) {
         AddressBookModel model = new AddressBookModel(0, dto.getName(), dto.getPhone(), dto.getEmail());
-        repo.save(model);         // ? DB me save
-        memList.add(model);       // ? List me bhi add
+        repo.save(model);
+        memList.add(model);
     }
 
+    @Override
     public List<AddressBookModel> getAll() {
-        return new ArrayList<>(memList); // ? Memory se return karna hai
+        return new ArrayList<>(memList);
     }
 
+    @Override
     public Optional<AddressBookModel> getById(int id) {
-        return memList.stream().filter(e -> e.getId() == id).findFirst(); // ? List se fetch karna hai
+        return memList.stream().filter(e -> e.getId() == id).findFirst();
     }
 
+    @Override
     public boolean update(int id, AddressBookDTO dto) {
         Optional<AddressBookModel> existing = repo.findById(id);
         if (existing.isPresent()) {
@@ -50,28 +53,32 @@ public class AddressBookService {
             model.setName(dto.getName());
             model.setPhone(dto.getPhone());
             model.setEmail(dto.getEmail());
-            repo.save(model);    // ? DB me update
-            memList.removeIf(e -> e.getId() == id); // ? List se purana data hatao
-            memList.add(model);  // ? List me naya data daalo
+            repo.save(model);
+            memList.removeIf(e -> e.getId() == id);
+            memList.add(model);
             return true;
         }
         return false;
     }
 
+    @Override
     public boolean delete(int id) {
         if (repo.existsById(id)) {
-            repo.deleteById(id);   // ? DB se delete
-            memList.removeIf(e -> e.getId() == id); // ? List se bhi delete
+            repo.deleteById(id);
+            memList.removeIf(e -> e.getId() == id);
             return true;
         }
         return false;
     }
+
+    @Override
     public void addEntry(String name, String phone) {
         log.info("Adding contact: {} - {}", name, phone);
-        AddressBookModel contact = new AddressBookModel(0, name, phone, ""); // Email empty rakh diya
+        AddressBookModel contact = new AddressBookModel(0, name, phone, "");
         repo.save(contact);
     }
 
+    @Override
     public void deleteEntry(String name) {
         log.warn("Deleting contact: {}", name);
         if (repo.existsByName(name)) {
