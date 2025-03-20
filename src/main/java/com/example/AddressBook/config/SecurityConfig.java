@@ -26,25 +26,25 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .cors(cors -> cors.disable()) // ✅ Disable CORS
-                .csrf(csrf -> csrf.disable()) // ✅ Disable CSRF
+                .cors(cors -> cors.disable())
+                .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
-                                "/api/auth/**",
-                                "/swagger-ui/**",
                                 "/v3/api-docs/**",
-                                "/v3/api-docs.yaml",
+                                "/swagger-ui/**",
                                 "/swagger-resources/**",
                                 "/configuration/ui",
                                 "/configuration/security",
                                 "/webjars/**"
-                        ).permitAll() // ✅ Swagger + Auth Allowed
-                        .anyRequest().authenticated()
-                )
-                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class); // ✅ Added Jwt Filter
+                        ).permitAll()  // ✅ Allow Swagger APIs
+                        .anyRequest().permitAll() // ✅ Allow all APIs
+                );
 
         return http.build();
     }
+
+
+
 
     @Bean
     public AuthenticationManager authenticationManager() {
@@ -59,3 +59,5 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 }
+
+

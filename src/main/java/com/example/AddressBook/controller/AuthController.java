@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import jakarta.servlet.http.HttpServletResponse;
 import java.util.Map;
 
 @RestController
@@ -26,14 +27,21 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginDTO dto) {
+    public ResponseEntity<?> login(@RequestBody LoginDTO dto, HttpServletResponse response) {
         try {
             String token = service.login(dto);
+            response.setHeader("Authorization", "Bearer " + token);
             return ResponseEntity.ok(token);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Login failed: " + e.getMessage());
         }
     }
+
+
+
+
+
+
     @PostMapping("/forgot-password")
     public ResponseEntity<?> forgotPassword(@RequestBody Map<String, String> request) {
         String email = request.get("email");
@@ -42,5 +50,4 @@ public class AuthController {
         String response = service.forgotPassword(email, newPassword);
         return ResponseEntity.ok(response);
     }
-
 }
